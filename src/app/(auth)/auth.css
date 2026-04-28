@@ -1,0 +1,254 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap");
+
+/* ─── Root ─────────────────────────────────────────────────── */
+.auth-root {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: #0a0a0f;
+  position: relative;
+  overflow: hidden;
+  font-family: "DM Sans", sans-serif;
+}
+
+/* ─── Animated background blobs ────────────────────────────── */
+.auth-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.auth-bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  animation: drift 12s ease-in-out infinite alternate;
+}
+.blob-1 {
+  width: 500px; height: 500px;
+  background: #6c63ff;
+  top: -120px; left: -100px;
+  animation-delay: 0s;
+}
+.blob-2 {
+  width: 400px; height: 400px;
+  background: #ff6584;
+  bottom: -80px; right: -80px;
+  animation-delay: -4s;
+}
+.blob-3 {
+  width: 300px; height: 300px;
+  background: #43e8d8;
+  top: 40%; left: 55%;
+  animation-delay: -8s;
+}
+@keyframes drift {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(30px, 20px) scale(1.08); }
+}
+
+/* ─── Wrapper & Card ────────────────────────────────────────── */
+.auth-wrapper {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 420px;
+}
+
+.auth-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.03),
+    0 32px 64px rgba(0, 0, 0, 0.5);
+  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Header ────────────────────────────────────────────────── */
+.auth-header {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.auth-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6c63ff, #43e8d8);
+  color: #fff;
+  font-size: 1.25rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 8px 24px rgba(108, 99, 255, 0.4);
+}
+
+.auth-title {
+  font-family: "Fraunces", serif;
+  font-size: 1.875rem;
+  font-weight: 300;
+  color: #f0f0f8;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin: 0 0 0.35rem;
+}
+
+.auth-subtitle {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+  font-weight: 300;
+}
+
+/* ─── Google button ─────────────────────────────────────────── */
+.google-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  height: 44px;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #e8e8f0;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  font-family: "DM Sans", sans-serif;
+}
+.google-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  transform: translateY(-1px);
+}
+.google-btn:active { transform: translateY(0); }
+
+/* ─── Divider ───────────────────────────────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0;
+}
+.divider [data-slot="separator"] {
+  background: rgba(255, 255, 255, 0.08);
+  flex: 1;
+}
+.divider-text {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.3);
+  white-space: nowrap;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ─── Form ──────────────────────────────────────────────────── */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.field-label {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+}
+
+.field-input {
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #f0f0f8 !important;
+  font-size: 0.875rem;
+  font-family: "DM Sans", sans-serif;
+  transition: border-color 0.2s, background 0.2s;
+}
+.field-input::placeholder { color: rgba(255,255,255,0.25) !important; }
+.field-input:focus {
+  border-color: rgba(108, 99, 255, 0.6) !important;
+  background: rgba(255, 255, 255, 0.07) !important;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15) !important;
+}
+
+.forgot-link {
+  font-size: 0.75rem;
+  color: rgba(108, 99, 255, 0.85);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.forgot-link:hover { color: #8b84ff; }
+
+/* ─── Submit button ─────────────────────────────────────────── */
+.submit-btn {
+  width: 100%;
+  height: 44px;
+  margin-top: 0.25rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: "DM Sans", sans-serif;
+  background: linear-gradient(135deg, #6c63ff 0%, #a78bfa 100%) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 4px 16px rgba(108, 99, 255, 0.35);
+  transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+.submit-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(108, 99, 255, 0.45);
+}
+.submit-btn:active { transform: translateY(0); }
+.submit-btn:disabled { opacity: 0.6; transform: none; cursor: not-allowed; }
+
+/* ─── Footer ────────────────────────────────────────────────── */
+.auth-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.auth-terms {
+  margin-top: 0.75rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.25);
+  line-height: 1.5;
+}
+
+.auth-link {
+  color: rgba(108, 99, 255, 0.9);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s;
+}
+.auth-link:hover { color: #a78bfa; }
