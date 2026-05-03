@@ -15,11 +15,21 @@ export default function SignUpPage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleEmailSignUp = async (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleCredentialSignUp = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    // Call your registration API endpoint here, then sign in
-    // await fetch("/api/auth/register", { method: "POST", body: JSON.stringify({ name, email, password }) });
+    const res = await fetch("/api/sign-up", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.error(data.error);
+      setIsLoading(false);
+      return;
+    } 
+    ;
     await signIn("credentials", { email, password, callbackUrl: "/dashboard" });
     setIsLoading(false);
   };
@@ -52,7 +62,7 @@ export default function SignUpPage() {
         <Separator />
       </div>
 
-      <form onSubmit={handleEmailSignUp} className="auth-form">
+      <form onSubmit={handleCredentialSignUp} className="auth-form">
         <div className="field-group">
           <Label htmlFor="name" className="field-label">Full name</Label>
           <Input

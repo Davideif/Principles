@@ -1,6 +1,6 @@
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
-import { supabaseAdmin } from "@/lib/supabase/supabase";
+import { supabase } from "@/lib/supabase";
 import bcrypt from "bcrypt";
 import { NextAuthOptions } from "next-auth";
 
@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        const { data: user, error } = await supabaseAdmin
+        const { data: user, error } = await supabase
           .from("users")
           .select("*")
           .eq("email", credentials.email)
@@ -33,6 +33,7 @@ export const authOptions: NextAuthOptions = {
 
         if (!isValid) return null;
 
+      
         return { id: user.id, email: user.email, name: user.name, image: user.image };
       },
     }),
@@ -44,38 +45,49 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   callbacks: {
     async signIn({ user, account }) {
-  if (account?.provider === "google") {
-    const { data, error } = await supabaseAdmin
-      .from("users")
-      .select("id")
-      .eq("email", user.email!)
-      .single();
+      if (account?.provider === "google") {
+        const { data: existing } = await supabase
+          .from("users")
+          .select("id")
+          .eq("email", user.email!)
+          .single();
 
-    if (!data) {
-      // User doesn't exist — create them
-      const { error: insertError } = await supabaseAdmin
-        .from("users")
-        .insert({
-          email: user.email,
-          name: user.name,
-          image: user.image,
-        });
+        if (existing) {
 
-      if (insertError) return "/error";
-    }
-  }
+          user.id = existing.id;
+        } else {
+          const { data: created, error: insertError } = await supabase
+            .from("users")
+            .insert({
+              email: user.email,
+              name: user.name,
+              image: user.image,
+            })
+            .select("id")
+            .single();
 
-  return true;
-},
-    async jwt({ token, account }) {
+          if (insertError || !created) return "/error";
+
+          user.id = created.id; 
+        }
+      }
+
+      return true;
+    },
+
+    async jwt({ token, user, account }) {
       if (account) {
         token.accessToken = account.access_token;
       }
+      if (user?.id) {
+        token.supabaseId = user.id;
+      }
       return token;
     },
+
     async session({ session, token }) {
-      if (token.sub && session.user) {
-        session.user.id = token.sub;
+      if (session.user) {
+        session.user.id = token.sub as string;
       }
       return session;
     },
