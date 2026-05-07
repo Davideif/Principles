@@ -1,5 +1,5 @@
 import { NextRequest,NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
@@ -9,7 +9,6 @@ export async function POST(req: NextRequest) {
     try {
         const { content, source, tags } = await req.json();
         const session = await getServerSession(authOptions);
-        console.log("Session in POST /api/principles:", session);
 
         if (!session) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -20,7 +19,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Content is required and must be a string." }, { status: 400 });
         }
 
-        const { data, error } = await supabase
+        const { data, error } = await supabaseAdmin
             .from("principles")
             .insert({ content, source, tags, user_id: session.user.id })
             .select("*")

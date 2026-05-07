@@ -1,6 +1,6 @@
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase/server";
 import bcrypt from "bcrypt";
 import { NextAuthOptions } from "next-auth";
 
@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        const { data: user, error } = await supabase
+        const { data: user, error } = await supabaseAdmin
           .from("users")
           .select("*")
           .eq("email", credentials.email)
@@ -46,7 +46,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider === "google") {
-        const { data: existing } = await supabase
+        const { data: existing } = await supabaseAdmin
           .from("users")
           .select("id")
           .eq("email", user.email!)
@@ -56,7 +56,7 @@ export const authOptions: NextAuthOptions = {
 
           user.id = existing.id;
         } else {
-          const { data: created, error: insertError } = await supabase
+          const { data: created, error: insertError } = await supabaseAdmin
             .from("users")
             .insert({
               email: user.email,
@@ -87,7 +87,7 @@ export const authOptions: NextAuthOptions = {
 
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.sub as string;
+        session.user.id = token.supabaseId as string;
       }
       return session;
     },

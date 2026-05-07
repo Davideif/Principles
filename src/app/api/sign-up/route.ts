@@ -1,7 +1,7 @@
 // POST api/sign-up
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase/server";
 
 export async function POST(request: NextRequest) {
   const { name, email, password } = await request.json();
@@ -10,7 +10,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const { data: existingUser } = await supabase
+    const { data: existingUser } = await supabaseAdmin
       .from("users")
       .select("*")
       .eq("email", email)
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     }   
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const { data: newUser, error } = await supabase
+    const { data: newUser, error } = await supabaseAdmin
       .from("users")
       .insert({ name, email, password: hashedPassword })
       .select("*")

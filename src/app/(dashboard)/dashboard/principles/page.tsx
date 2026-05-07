@@ -1,19 +1,24 @@
-import AddPrincipleForm from "@/components/principles/AddPrincipleForm";
-import PrincipleCard from "@/components/principles/PrincipleCard";
+"use client"
 
-export default function Principles() {
-    return (
-        <div className="flex flex-col items-center justify-center h-full">
-            <h1 className="text-4xl font-bold mb-4">Principles</h1>
-            <PrincipleCard principle={{
-                id: "1",
-                content: "Always write clean and maintainable code.",
-                source: "Clean Code by Robert C. Martin",
-                created_at: new Date().toISOString(),
-                tags: ["coding", "best practices"]
-            }}  />
-            <AddPrincipleForm  />
-        </div>    
-        );
-}   
-        
+import { useState } from "react"
+import AddPrincipleForm from "@/components/principles/AddPrincipleForm"
+import PrincipleList from "@/components/principles/PrincipleList"
+
+export default function PrinciplesPage() {
+
+  const [refreshKey, setRefreshKey] = useState(0)
+
+  return (
+    <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
+      <div>
+        <h1 className="text-2xl font-semibold">My Principles</h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          Lessons you have collected from books, podcasts, and life.
+        </p>
+      </div>
+
+      <AddPrincipleForm onSuccess={() => setRefreshKey(k => k + 1)} />
+      <PrincipleList refreshKey={refreshKey} />
+    </div>
+  )
+}
