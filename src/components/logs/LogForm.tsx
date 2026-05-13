@@ -30,7 +30,11 @@ export default function LogForm() {
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        toast.error(err.error ?? "Failed to analyze. Please try again.");
+        if (res.status === 429) {
+          toast.error("AI is rate limited. Please wait a minute and try again.");
+        } else {
+          toast.error(err.error ?? "Failed to analyze. Please try again.");
+        }
         return;
       }
 
@@ -55,8 +59,6 @@ export default function LogForm() {
 
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
-
-            {/* Situation */}
             <div className="space-y-2">
               <Label htmlFor="situation">Describe your situation</Label>
               <Textarea
@@ -68,7 +70,6 @@ export default function LogForm() {
                 className="resize-none"
               />
             </div>
-
           </CardContent>
 
           <CardFooter>

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import Navbar from "@/components/layout/Navbar";
 import AuthProvider from "@/components/layout/AuthProvider";
 import { Toaster } from "@/components/ui/sonner"
+import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
   title: "Principles",
@@ -22,6 +23,7 @@ export default function RootLayout({
           <AuthProvider>
           <Navbar />
           <main>{children}</main>
+          <Footer />
           <Toaster position="top-center"  />
           </AuthProvider>
         </body>

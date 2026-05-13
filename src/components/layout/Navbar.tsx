@@ -31,6 +31,7 @@ import {
   UserCircle,
   CreditCard,
   ChevronDown,
+  Brain,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -73,9 +74,11 @@ export default function Navbar() {
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2">
             <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-foreground">
-              <span className="text-xs font-bold text-background">S</span>
+              <Brain className="h-5 w-5 text-[#c9a96e]" />
             </span>
-            <span className="text-sm font-semibold tracking-tight">Principles</span>
+             <span className="text-lg font-semibold tracking-tight text-[#f0ece4]">
+            Principles
+          </span>
           </Link>
 
           {/* Desktop nav links */}
