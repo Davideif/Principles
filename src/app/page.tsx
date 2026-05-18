@@ -9,7 +9,6 @@ import {
   Sparkles,
   Check,
   ArrowRight,
-  Brain,
 } from "lucide-react"
 
 

@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react"
 import { createClient } from "@/lib/supabase/client"
 import PrincipleCard, { Principle } from "@/components/principles/PrincipleCard"
 import { Skeleton } from "@/components/ui/skeleton"
+import CuratedPicker from "@/components/principles/CuratedPicker"
 
 interface PrincipleListProps {
   refreshKey?: number
@@ -95,23 +96,16 @@ export default function PrincipleList({ refreshKey = 0 }: PrincipleListProps) {
     )
   }
 
-  // ── Empty state ───────────────────────────────────────────────────────────
-
-  if (principles.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-16 text-center">
-        <p className="text-sm font-medium text-foreground">No principles yet</p>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Add your first principle above to get started.
-        </p>
-      </div>
-    )
-  }
 
   // ── Principles list ───────────────────────────────────────────────────────
 
-  return (
+   return (
     <div className="flex flex-col gap-3">
+      {principles.length === 0 && !loading && (
+        <p className="text-sm text-muted-foreground text-center py-6">
+          No principles yet — pick some from the list above or add your own.
+        </p>
+      )}
       {principles.map((principle) => (
         <PrincipleCard
           key={principle.id}

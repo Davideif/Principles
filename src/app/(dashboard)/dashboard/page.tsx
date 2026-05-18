@@ -144,7 +144,9 @@ export default function DashboardPage() {
           <CardContent className="pt-5 space-y-1">
             <div className="flex items-center gap-2 text-muted-foreground">
               <BookMarked className="h-4 w-4" />
-              <span className="text-xs">Principles</span>
+              <Link href="/dashboard/principles" className="text-xs">
+                Principles
+              </Link>
             </div>
             <p className="text-2xl font-bold">{stats?.totalPrinciples ?? 0}</p>
           </CardContent>
@@ -154,7 +156,9 @@ export default function DashboardPage() {
           <CardContent className="pt-5 space-y-1">
             <div className="flex items-center gap-2 text-muted-foreground">
               <ScrollText className="h-4 w-4" />
-              <span className="text-xs">Logs</span>
+              <Link href="/dashboard/log" className="text-xs">
+                Logs
+              </Link>
             </div>
             <p className="text-2xl font-bold">{stats?.totalLogs ?? 0}</p>
           </CardContent>

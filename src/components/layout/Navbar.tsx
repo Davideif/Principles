@@ -19,6 +19,7 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
+  SheetTitle,   
 } from "@/components/ui/sheet";
 import {
   LayoutDashboard,
@@ -179,6 +180,7 @@ export default function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-64 p-0">
+              <SheetTitle className="sr-only">Navigation menu</SheetTitle>
               <div className="flex h-14 items-center border-b px-4">
                 <Link
                   href="/"
