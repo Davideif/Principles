@@ -19,7 +19,7 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
-  SheetTitle,   
+  SheetTitle,
 } from "@/components/ui/sheet";
 import {
   LayoutDashboard,
@@ -74,12 +74,14 @@ export default function Navbar() {
         {/* Left — Logo */}
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-foreground">
-              <Brain className="h-5 w-5 text-[#c9a96e]" />
+           
+            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 border border-primary/20">
+              <Brain className="h-4 w-4 text-primary" />
             </span>
-             <span className="text-lg font-semibold tracking-tight text-[#f0ece4]">
-            Principles
-          </span>
+          
+            <span className="text-lg font-semibold tracking-tight text-foreground font-serif">
+              Principles
+            </span>
           </Link>
 
           {/* Desktop nav links */}
@@ -89,7 +91,7 @@ export default function Navbar() {
                 key={href}
                 href={href}
                 className={cn(
-                  "rounded-md px-3 py-1.5 text-sm font-medium transition-colors",
+                  "rounded-md px-3 py-1.5 text-sm font-medium font-sans transition-colors",
                   pathname === href
                     ? "bg-muted text-foreground"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
@@ -105,7 +107,6 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
 
           {isLoggedIn && (
-            /* Notification bell — only for logged-in users */
             <Button variant="ghost" size="icon" className="relative h-8 w-8 text-muted-foreground hover:text-foreground">
               <Bell className="h-4 w-4" />
               <Badge className="absolute -top-0.5 -right-0.5 h-4 w-4 justify-center rounded-full p-0 text-[10px]">
@@ -114,7 +115,6 @@ export default function Navbar() {
             </Button>
           )}
 
-          {/* Auth: logged in → user dropdown, guest → sign in button */}
           {!isLoading && (
             isLoggedIn ? (
               <DropdownMenu>
@@ -125,16 +125,19 @@ export default function Navbar() {
                   >
                     <Avatar className="h-6 w-6">
                       <AvatarImage src={userImage} alt={userName} />
-                      <AvatarFallback className="text-[10px]">{userInitials}</AvatarFallback>
+                      {/* ✦ IMPROVED: gold initials fallback instead of generic grey */}
+                      <AvatarFallback className="text-[10px] bg-primary/10 text-primary">
+                        {userInitials}
+                      </AvatarFallback>
                     </Avatar>
-                    <span className="text-sm font-medium">{userName}</span>
+                    <span className="text-sm font-medium font-sans">{userName}</span>
                     <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuLabel className="font-normal">
-                    <p className="text-xs text-muted-foreground">Signed in as</p>
-                    <p className="text-sm font-medium truncate">{userEmail}</p>
+                    <p className="text-xs text-muted-foreground font-sans">Signed in as</p>
+                    <p className="text-sm font-medium truncate font-sans">{userEmail}</p>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
@@ -166,7 +169,11 @@ export default function Navbar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button asChild size="sm" className="hidden md:flex h-8">
+              <Button
+                asChild
+                size="sm"
+                className="hidden md:flex h-8 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-sans"
+              >
                 <Link href="/sign-in">Sign in</Link>
               </Button>
             )
@@ -181,16 +188,16 @@ export default function Navbar() {
             </SheetTrigger>
             <SheetContent side="left" className="w-64 p-0">
               <SheetTitle className="sr-only">Navigation menu</SheetTitle>
-              <div className="flex h-14 items-center border-b px-4">
+              <div className="flex h-14 items-center border-b border-border px-4">
                 <Link
                   href="/"
                   className="flex items-center gap-2"
                   onClick={() => setMobileOpen(false)}
                 >
-                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-foreground">
-                    <span className="text-xs font-bold text-background">S</span>
+                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 border border-primary/20">
+                    <Brain className="h-4 w-4 text-primary" />
                   </span>
-                  <span className="text-sm font-semibold tracking-tight">Principles</span>
+                  <span className="text-sm font-semibold tracking-tight font-serif">Principles</span>
                 </Link>
               </div>
               <nav className="flex flex-col gap-1 p-3">
@@ -200,7 +207,7 @@ export default function Navbar() {
                     href={href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                      "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium font-sans transition-colors",
                       pathname === href
                         ? "bg-muted text-foreground"
                         : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
@@ -212,17 +219,18 @@ export default function Navbar() {
                 ))}
               </nav>
 
-              {/* Mobile bottom — user info or sign in */}
-              <div className="absolute bottom-0 left-0 right-0 border-t p-3">
+              <div className="absolute bottom-0 left-0 right-0 border-t border-border p-3">
                 {isLoggedIn ? (
                   <div className="flex items-center gap-3 rounded-md px-3 py-2">
                     <Avatar className="h-7 w-7">
                       <AvatarImage src={userImage} alt={userName} />
-                      <AvatarFallback className="text-xs">{userInitials}</AvatarFallback>
+                      <AvatarFallback className="text-xs bg-primary/10 text-primary">
+                        {userInitials}
+                      </AvatarFallback>
                     </Avatar>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium truncate">{userName}</p>
-                      <p className="text-xs text-muted-foreground truncate">{userEmail}</p>
+                      <p className="text-sm font-medium truncate font-sans">{userName}</p>
+                      <p className="text-xs text-muted-foreground truncate font-sans">{userEmail}</p>
                     </div>
                     <Button
                       variant="ghost"
@@ -234,7 +242,11 @@ export default function Navbar() {
                     </Button>
                   </div>
                 ) : (
-                  <Button asChild className="w-full" size="sm">
+                  <Button
+                    asChild
+                    className="w-full rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-sans"
+                    size="sm"
+                  >
                     <Link href="/sign-in" onClick={() => setMobileOpen(false)}>
                       Sign in
                     </Link>

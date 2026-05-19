@@ -15,9 +15,7 @@ export default function LogForm() {
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (!situation.trim()) return;
-
     setLoading(true);
     setAiResponse("");
 
@@ -52,22 +50,29 @@ export default function LogForm() {
     <div className="w-full max-w-2xl space-y-4">
 
       {/* ── Form ── */}
-      <Card className="w-full">
+      <Card className="w-full border-border bg-card">
         <CardHeader>
-          <CardTitle>What is going on?</CardTitle>
+          <CardTitle className="font-serif font-normal text-xl text-foreground">
+            What is going on?
+          </CardTitle>
         </CardHeader>
 
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="situation">Describe your situation</Label>
+              <Label
+                htmlFor="situation"
+                className="text-sm text-muted-foreground font-sans"
+              >
+                Describe your situation
+              </Label>
               <Textarea
                 id="situation"
                 placeholder="E.g. I have been fired from my job and I am not sure what to do next. I feel lost and demotivated..."
                 value={situation}
                 onChange={(e) => setSituation(e.target.value)}
                 rows={6}
-                className="resize-none"
+                className="resize-none bg-muted/40 border-border text-foreground placeholder:text-muted-foreground font-sans focus-visible:ring-primary"
               />
             </div>
           </CardContent>
@@ -75,8 +80,8 @@ export default function LogForm() {
           <CardFooter>
             <Button
               type="submit"
-              className="w-full"
               disabled={loading || !situation.trim()}
+              className="w-full rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold font-sans"
             >
               {loading ? (
                 <>
@@ -98,13 +103,13 @@ export default function LogForm() {
       {aiResponse && (
         <Card className="w-full border-primary/20 bg-primary/5">
           <CardHeader>
-            <CardTitle className="text-base flex items-center gap-2">
+            <CardTitle className="text-base font-sans font-medium flex items-center gap-2 text-foreground">
               <Sparkles className="h-4 w-4 text-primary" />
               Your principles say
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm leading-relaxed whitespace-pre-wrap">
+            <p className="text-sm leading-relaxed whitespace-pre-wrap font-sans text-muted-foreground">
               {aiResponse}
             </p>
           </CardContent>

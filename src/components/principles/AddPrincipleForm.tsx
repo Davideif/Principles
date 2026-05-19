@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useState, KeyboardEvent } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -22,7 +21,6 @@ export default function AddPrincipleForm({ onSuccess, className }: AddPrincipleF
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
 
   const addTag = (value: string) => {
     const trimmed = value.trim().toLowerCase();
@@ -47,14 +45,11 @@ export default function AddPrincipleForm({ onSuccess, className }: AddPrincipleF
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     if (!content.trim()) {
       toast.error("Content is required.");
       return;
     }
-
     setIsSubmitting(true);
-
     try {
       const response = await fetch("/api/principles", {
         method: "POST",
@@ -65,21 +60,17 @@ export default function AddPrincipleForm({ onSuccess, className }: AddPrincipleF
           tags,
         }),
       });
-
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
         throw new Error(data?.message || "Failed to add principle.");
       }
-
       setContent("");
       setSource("");
       setTags([]);
       setTagInput("");
-
       toast.success("Principle added");
-
       onSuccess?.();
-    } catch (err) {
+    } catch {
       toast.error("Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -95,49 +86,57 @@ export default function AddPrincipleForm({ onSuccess, className }: AddPrincipleF
       )}
     >
       <div className="space-y-1">
-        <h2 className="text-lg font-semibold tracking-tight">Add a Principle</h2>
-        <p className="text-sm text-muted-foreground">
+        <h2 className="font-serif font-normal text-xl text-foreground tracking-tight">
+          Add a Principle
+        </h2>
+        <p className="text-sm text-muted-foreground font-sans">
           Record a guiding principle, its source, and relevant tags.
         </p>
       </div>
 
       {/* Content */}
       <div className="space-y-2">
-        <Label htmlFor="content">
+        <Label htmlFor="content" className="text-sm text-muted-foreground font-sans">
           Content <span className="text-destructive">*</span>
         </Label>
+        
         <Textarea
           id="content"
           placeholder="Write the principle here…"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           rows={4}
-          className="resize-none"
+          className="resize-none bg-muted/40 border-border text-foreground placeholder:text-muted-foreground font-sans focus-visible:ring-primary"
         />
       </div>
 
       {/* Source */}
       <div className="space-y-2">
-        <Label htmlFor="source">Source</Label>
+        <Label htmlFor="source" className="text-sm text-muted-foreground font-sans">
+          Source
+        </Label>
         <Input
           id="source"
           placeholder="e.g. Meditations by Marcus Aurelius"
           value={source}
           onChange={(e) => setSource(e.target.value)}
+          className="bg-muted/40 border-border text-foreground placeholder:text-muted-foreground font-sans focus-visible:ring-primary"
         />
       </div>
 
-      {/* Tags */}
+        {/* Tags */}
       <div className="space-y-2">
-        <Label htmlFor="tags">Tags</Label>
+        <Label htmlFor="tags" className="text-sm text-muted-foreground font-sans">
+          Tags
+        </Label>
         <div
           className={cn(
-            "flex flex-wrap items-center gap-1.5 min-h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background",
-            "focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2"
+            "flex flex-wrap items-center gap-1.5 min-h-10 w-full rounded-md border border-input bg-muted/40 px-3 py-2 text-sm",
+            "focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2 focus-within:ring-offset-background"
           )}
         >
           {tags.map((tag) => (
-            <Badge key={tag} variant="secondary" className="flex items-center gap-1 pr-1">
+            <Badge key={tag} variant="secondary" className="flex items-center gap-1 pr-1 font-sans">
               {tag}
               <button
                 type="button"
@@ -157,7 +156,7 @@ export default function AddPrincipleForm({ onSuccess, className }: AddPrincipleF
             onKeyDown={handleTagKeyDown}
             onBlur={() => tagInput.trim() && addTag(tagInput)}
             placeholder={tags.length === 0 ? "Add tags (press Enter or comma)" : ""}
-            className="flex-1 min-w-[120px] bg-transparent outline-none placeholder:text-muted-foreground"
+            className="flex-1 min-w-[120px] bg-transparent outline-none placeholder:text-muted-foreground font-sans text-foreground"
           />
           {tagInput.trim() && (
             <button
@@ -170,14 +169,17 @@ export default function AddPrincipleForm({ onSuccess, className }: AddPrincipleF
             </button>
           )}
         </div>
-        <p className="text-xs text-muted-foreground">
-          Press <kbd className="font-mono bg-muted px-1 rounded">Enter</kbd> or{" "}
-          <kbd className="font-mono bg-muted px-1 rounded">,</kbd> to add a tag.
+        <p className="text-xs text-muted-foreground font-sans">
+          Press <kbd className="font-mono bg-muted px-1 rounded text-foreground">Enter</kbd> or{" "}
+          <kbd className="font-mono bg-muted px-1 rounded text-foreground">,</kbd> to add a tag.
         </p>
       </div>
 
-      {/* Submit */}
-      <Button type="submit" disabled={isSubmitting} className="w-full">
+      <Button
+        type="submit"
+        disabled={isSubmitting}
+        className="w-full rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold font-sans"
+      >
         {isSubmitting ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

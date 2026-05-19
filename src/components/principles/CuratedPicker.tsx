@@ -15,7 +15,7 @@ import { Check, Loader2, Sparkles } from "lucide-react"
 import { toast } from "sonner"
 
 interface CuratedPickerProps {
-  onDone?: () => void // called after user saves — parent can refresh list
+  onDone?: () => void
 }
 
 export default function CuratedPicker({ onDone }: CuratedPickerProps) {
@@ -23,8 +23,6 @@ export default function CuratedPicker({ onDone }: CuratedPickerProps) {
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [activeCategory, setActiveCategory] = useState<string>(CURATED_CATEGORIES[0])
   const [loading, setLoading] = useState(false)
-
-  // ── Toggle selection ───────────────────────────────────────────────────────
 
   function toggle(id: string) {
     setSelected((prev) => {
@@ -34,16 +32,11 @@ export default function CuratedPicker({ onDone }: CuratedPickerProps) {
     })
   }
 
-  // ── Save selected to Supabase ──────────────────────────────────────────────
-
   async function handleSave() {
     if (!session?.user?.id || selected.size === 0) return
-
     setLoading(true)
-
     const supabase = createClient()
     const userId = session.user.id
-
     const toInsert = CURATED_PRINCIPLES.filter((p) => selected.has(p.id)).map(
       (p) => ({
         user_id: userId,
@@ -52,9 +45,7 @@ export default function CuratedPicker({ onDone }: CuratedPickerProps) {
         tags: p.tags,
       })
     )
-
     const { error } = await supabase.from("principles").insert(toInsert)
-
     if (error) {
       toast.error("Failed to save principles. Please try again.")
     } else {
@@ -63,43 +54,34 @@ export default function CuratedPicker({ onDone }: CuratedPickerProps) {
       )
       onDone?.()
     }
-
     setLoading(false)
   }
 
-  // ── Filtered principles by active category ─────────────────────────────────
-
-  const filtered = CURATED_PRINCIPLES.filter(
-    (p) => p.category === activeCategory
-  )
-
-  // ── Render ─────────────────────────────────────────────────────────────────
+  const filtered = CURATED_PRINCIPLES.filter((p) => p.category === activeCategory)
 
   return (
     <div className="w-full space-y-6">
 
-      {/* Header */}
       <div>
-        <h2 className="text-lg font-semibold flex items-center gap-2">
+        <h2 className="font-serif font-normal text-xl text-foreground flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-primary" />
           Start with the greats
         </h2>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="text-sm text-muted-foreground font-sans mt-1">
           Select any principles that resonate with you. They will be added to
           your library instantly.
         </p>
       </div>
 
-      {/* Category tabs */}
       <div className="flex flex-wrap gap-2">
         {CURATED_CATEGORIES.map((cat) => (
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
             className={cn(
-              "rounded-full px-4 py-1.5 text-xs font-medium transition-colors",
+              "rounded-full px-4 py-1.5 text-xs font-medium font-sans transition-colors",
               activeCategory === cat
-                ? "bg-foreground text-background"
+                ? "bg-primary text-primary-foreground"
                 : "bg-muted text-muted-foreground hover:text-foreground"
             )}
           >
@@ -108,7 +90,6 @@ export default function CuratedPicker({ onDone }: CuratedPickerProps) {
         ))}
       </div>
 
-      {/* Principles grid */}
       <div className="grid grid-cols-1 gap-3">
         {filtered.map((principle) => {
           const isSelected = selected.has(principle.id)
@@ -123,21 +104,24 @@ export default function CuratedPicker({ onDone }: CuratedPickerProps) {
         })}
       </div>
 
-      {/* Footer */}
-      <div className="flex items-center justify-between pt-2 border-t">
-        <span className="text-sm text-muted-foreground">
-          {selected.size > 0
-            ? `${selected.size} selected`
-            : "None selected yet"}
+      <div className="flex items-center justify-between pt-2 border-t border-border">
+        <span className="text-sm text-muted-foreground font-sans">
+          {selected.size > 0 ? `${selected.size} selected` : "None selected yet"}
         </span>
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" onClick={onDone}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onDone}
+            className="font-sans text-muted-foreground hover:text-foreground"
+          >
             Skip
           </Button>
           <Button
             size="sm"
             onClick={handleSave}
             disabled={selected.size === 0 || loading}
+            className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-sans font-semibold"
           >
             {loading ? (
               <>
@@ -145,9 +129,7 @@ export default function CuratedPicker({ onDone }: CuratedPickerProps) {
                 Adding...
               </>
             ) : (
-              <>
-                Add {selected.size > 0 ? selected.size : ""} to my library
-              </>
+              <>Add {selected.size > 0 ? selected.size : ""} to my library</>
             )}
           </Button>
         </div>
@@ -156,8 +138,6 @@ export default function CuratedPicker({ onDone }: CuratedPickerProps) {
     </div>
   )
 }
-
-// ── Single principle option ────────────────────────────────────────────────────
 
 function PrincipleOption({
   principle,
@@ -175,25 +155,24 @@ function PrincipleOption({
         "w-full text-left rounded-xl border p-4 transition-all",
         isSelected
           ? "border-primary/50 bg-primary/5"
-          : "border-border bg-card hover:border-border/80 hover:bg-muted/30"
+          : "border-border bg-card hover:border-primary/20 hover:bg-muted/30"
       )}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-2 flex-1">
-          <p className="text-sm leading-relaxed text-foreground">
+          <p className="font-serif text-sm leading-relaxed text-foreground">
             {principle.content}
           </p>
-          <p className="text-xs text-muted-foreground">{principle.source}</p>
+          <p className="text-xs text-muted-foreground font-sans">{principle.source}</p>
           <div className="flex flex-wrap gap-1">
             {principle.tags.map((tag) => (
-              <Badge key={tag} variant="secondary" className="text-xs">
+              <Badge key={tag} variant="secondary" className="text-xs font-sans">
                 {tag}
               </Badge>
             ))}
           </div>
         </div>
 
-        {/* Checkbox indicator */}
         <div
           className={cn(
             "mt-0.5 h-5 w-5 shrink-0 rounded-full border-2 flex items-center justify-center transition-colors",

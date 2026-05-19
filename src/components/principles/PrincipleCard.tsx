@@ -35,8 +35,6 @@ import {
   Check,
 } from "lucide-react"
 
-// ── Types ────────────────────────────────────────────────────────────────────
-
 export interface Principle {
   id: string
   content: string
@@ -51,8 +49,6 @@ interface PrincipleCardProps {
   onDelete: (id: string) => void
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
-
 export default function PrincipleCard({
   principle,
   onEdit,
@@ -62,12 +58,9 @@ export default function PrincipleCard({
   const [deleteOpen, setDeleteOpen] = useState(false)
   const [copied, setCopied] = useState(false)
 
-  // Edit form state — pre-filled with current values
   const [editContent, setEditContent] = useState(principle.content)
   const [editSource, setEditSource] = useState(principle.source ?? "")
   const [editTags, setEditTags] = useState(principle.tags?.join(", ") ?? "")
-
-  // ── Handlers ───────────────────────────────────────────────────────────────
 
   function handleCopy() {
     navigator.clipboard.writeText(principle.content)
@@ -93,30 +86,32 @@ export default function PrincipleCard({
     setDeleteOpen(false)
   }
 
-  // ── Render ─────────────────────────────────────────────────────────────────
-
   return (
     <>
-      <Card className="group flex flex-col justify-between gap-3 p-5 transition-shadow hover:shadow-md">
+
+      <Card className="group flex flex-col justify-between gap-3 p-5 transition-colors hover:border-primary/20 bg-card border-border">
         <CardContent className="p-0 space-y-3">
-          {/* Principle text */}
-          <p className="text-sm leading-relaxed text-foreground">
+
+         
+          <p className="font-serif text-sm leading-relaxed text-foreground">
             {principle.content}
           </p>
 
-          {/* Source */}
           {principle.source && (
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <BookOpen className="h-3.5 w-3.5 shrink-0" />
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-sans">
+              <BookOpen className="h-3.5 w-3.5 shrink-0 text-primary/60" />
               <span className="truncate">{principle.source}</span>
             </div>
           )}
 
-          {/* Tags */}
           {principle.tags && principle.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
               {principle.tags.map((tag) => (
-                <Badge key={tag} variant="secondary" className="text-xs">
+                <Badge
+                  key={tag}
+                  variant="secondary"
+                  className="text-xs font-sans"
+                >
                   {tag}
                 </Badge>
               ))}
@@ -125,8 +120,7 @@ export default function PrincipleCard({
         </CardContent>
 
         <CardFooter className="p-0 flex items-center justify-between">
-          {/* Date */}
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs text-muted-foreground font-sans">
             {new Date(principle.created_at).toLocaleDateString("en-GB", {
               day: "numeric",
               month: "short",
@@ -134,9 +128,7 @@ export default function PrincipleCard({
             })}
           </span>
 
-          {/* Actions */}
           <div className="flex items-center gap-1">
-            {/* Copy button */}
             <Button
               variant="ghost"
               size="icon"
@@ -144,14 +136,14 @@ export default function PrincipleCard({
               onClick={handleCopy}
               title="Copy principle"
             >
+              
               {copied ? (
-                <Check className="h-4 w-4 text-green-500" />
+                <Check className="h-4 w-4 text-primary" />
               ) : (
                 <Copy className="h-4 w-4" />
               )}
             </Button>
 
-            {/* More options dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -164,14 +156,14 @@ export default function PrincipleCard({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem onClick={() => setEditOpen(true)}>
+                <DropdownMenuItem onClick={() => setEditOpen(true)} className="font-sans">
                   <Pencil className="mr-2 h-4 w-4" />
                   Edit
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={() => setDeleteOpen(true)}
-                  className="text-destructive focus:text-destructive"
+                  className="text-destructive focus:text-destructive font-sans"
                 >
                   <Trash2 className="mr-2 h-4 w-4" />
                   Delete
@@ -182,83 +174,97 @@ export default function PrincipleCard({
         </CardFooter>
       </Card>
 
-      {/* ── Edit Dialog ──────────────────────────────────────────────────────── */}
+      {/* ── Edit Dialog ── */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>Edit principle</DialogTitle>
+            
+            <DialogTitle className="font-serif font-normal text-xl">
+              Edit principle
+            </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-4 py-2">
             <div className="space-y-1.5">
-              <Label htmlFor="edit-content">Principle</Label>
+              <Label htmlFor="edit-content" className="text-sm text-muted-foreground font-sans">
+                Principle
+              </Label>
               <Textarea
                 id="edit-content"
                 value={editContent}
                 onChange={(e) => setEditContent(e.target.value)}
                 rows={4}
                 placeholder="Write your principle..."
-                className="resize-none"
+                className="resize-none bg-muted/40 border-border text-foreground placeholder:text-muted-foreground font-sans focus-visible:ring-primary"
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="edit-source">
+              <Label htmlFor="edit-source" className="text-sm text-muted-foreground font-sans">
                 Source{" "}
-                <span className="text-muted-foreground font-normal">
-                  (optional)
-                </span>
+                <span className="text-muted-foreground/60 font-normal">(optional)</span>
               </Label>
               <Input
                 id="edit-source"
                 value={editSource}
                 onChange={(e) => setEditSource(e.target.value)}
                 placeholder="e.g. Meditations, Huberman podcast..."
+                className="bg-muted/40 border-border text-foreground placeholder:text-muted-foreground font-sans focus-visible:ring-primary"
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="edit-tags">
+              <Label htmlFor="edit-tags" className="text-sm text-muted-foreground font-sans">
                 Tags{" "}
-                <span className="text-muted-foreground font-normal">
-                  (comma separated)
-                </span>
+                <span className="text-muted-foreground/60 font-normal">(comma separated)</span>
               </Label>
               <Input
                 id="edit-tags"
                 value={editTags}
                 onChange={(e) => setEditTags(e.target.value)}
                 placeholder="e.g. mindset, work, health"
+                className="bg-muted/40 border-border text-foreground placeholder:text-muted-foreground font-sans focus-visible:ring-primary"
               />
             </div>
           </div>
 
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" className="font-sans rounded-full border-border text-muted-foreground hover:text-foreground">
+                Cancel
+              </Button>
             </DialogClose>
-            <Button onClick={handleEditSave} disabled={!editContent.trim()}>
+           
+            <Button
+              onClick={handleEditSave}
+              disabled={!editContent.trim()}
+              className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-sans font-semibold"
+            >
               Save changes
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* ── Delete Confirmation Dialog ────────────────────────────────────────── */}
+      {/* ── Delete Dialog ── */}
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
-            <DialogTitle>Delete principle?</DialogTitle>
+            <DialogTitle className="font-serif font-normal text-xl">
+              Delete principle?
+            </DialogTitle>
           </DialogHeader>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground font-sans">
             This principle will be permanently deleted. This action cannot be
             undone.
           </p>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" className="font-sans rounded-full border-border text-muted-foreground hover:text-foreground">
+                Cancel
+              </Button>
             </DialogClose>
-            <Button variant="destructive" onClick={handleDelete}>
+            <Button variant="destructive" onClick={handleDelete} className="rounded-full font-sans font-semibold">
               Delete
             </Button>
           </DialogFooter>

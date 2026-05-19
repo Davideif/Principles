@@ -102,7 +102,7 @@ export default function PrincipleList({ refreshKey = 0 }: PrincipleListProps) {
    return (
     <div className="flex flex-col gap-3">
       {principles.length === 0 && !loading && (
-        <p className="text-sm text-muted-foreground text-center py-6">
+        <p className="text-sm text-muted-foreground text-center py-6 font-sans">
           No principles yet — pick some from the list above or add your own.
         </p>
       )}

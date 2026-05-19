@@ -1,34 +1,266 @@
-"use client"
+import Link from "next/link"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
+import { redirect } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import {
+  BookOpen,
+  ScrollText,
+  Sparkles,
+  Check,
+  ArrowRight,
+} from "lucide-react"
 
-import { useState } from "react"
-import AddPrincipleForm from "@/components/principles/AddPrincipleForm"
-import PrincipleList from "@/components/principles/PrincipleList"
-import CuratedPicker from "@/components/principles/CuratedPicker"
-
-export default function PrinciplesPage() {
-  const [refreshKey, setRefreshKey] = useState(0)
+export default async function HomePage() {
+  const session = await getServerSession(authOptions)
+  if (session) redirect("/dashboard")
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
-      <div>
-        <h1 className="text-2xl font-semibold">My Principles</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Lessons you have collected from books, podcasts, and life.
+    <div className="min-h-screen bg-background text-foreground font-serif overflow-x-hidden">
+
+      {/* Noise texture overlay */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "128px",
+        }}
+      />
+
+      {/* Hero */}
+      <section className="relative z-10 max-w-5xl mx-auto px-6 pt-20 pb-28 text-center">
+        <div className="flex items-center justify-center gap-4 mb-10">
+          <div className="h-px w-16 bg-primary/40" />
+          <span className="text-xs tracking-[0.2em] uppercase text-primary font-sans">
+            Personal wisdom
+          </span>
+          <div className="h-px w-16 bg-primary/40" />
+        </div>
+
+        <h1 className="text-5xl sm:text-7xl font-bold leading-[1.05] tracking-tight text-foreground mb-6">
+          Your wisdom.
+          <br />
+          <span className="text-primary">When you need it most.</span>
+        </h1>
+
+        <p className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto leading-relaxed mb-10 font-sans font-light">
+          Collect principles from books, podcasts and life experience.
+          When something happens, get guidance from your own beliefs —
+          not generic AI advice.
         </p>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] gap-8 items-start">
-        {/* Left — Add form */}
-        <div className="lg:sticky lg:top-8">
-          <AddPrincipleForm onSuccess={() => setRefreshKey(k => k + 1)} />
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Button
+            asChild
+            size="lg"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-full px-8 text-base font-sans"
+          >
+            <Link href="/sign-in">
+              Start for free
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+          <span className="text-xs text-muted-foreground/60 font-sans">
+            No credit card required
+          </span>
         </div>
 
-        {/* Right — List + CuratedPicker always visible */}
-        <div className="flex flex-col gap-6">
-          <CuratedPicker onDone={() => setRefreshKey(k => k + 1)} />
-          <PrincipleList refreshKey={refreshKey} />
-        </div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+      </section>
+
+      {/* Divider */}
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       </div>
+
+      {/* How it works */}
+      <section className="relative z-10 max-w-5xl mx-auto px-6 py-24">
+        <div className="text-center mb-16">
+          <p className="text-xs tracking-[0.2em] uppercase text-primary font-sans mb-3">
+            How it works
+          </p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-foreground">
+            Three steps to live by your own rules
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+          {[
+            {
+              icon: BookOpen,
+              number: "01",
+              title: "Collect your principles",
+              description:
+                "As you read books, listen to podcasts, or learn from experience — add the lessons that resonate with you in your own words.",
+            },
+            {
+              icon: ScrollText,
+              number: "02",
+              title: "Log a situation",
+              description:
+                "When something happens — a setback, a decision, a conflict — write it down. Describe what you are facing honestly.",
+            },
+            {
+              icon: Sparkles,
+              number: "03",
+              title: "Hear your own wisdom",
+              description:
+                "The app finds the 2–3 principles you already believe in that apply right now. Your own words, reflected back when it matters.",
+            },
+          ].map(({ icon: Icon, number, title, description }) => (
+            <div key={number} className="relative">
+              <div className="text-6xl font-bold text-secondary absolute -top-4 -left-2 font-sans select-none">
+                {number}
+              </div>
+              <div className="relative pt-6 pl-2">
+                <div className="w-10 h-10 rounded-xl bg-secondary border border-border flex items-center justify-center mb-4">
+                  <Icon className="h-5 w-5 text-primary" />
+                </div>
+                <h3 className="text-lg font-semibold text-foreground mb-2 font-serif">
+                  {title}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed font-sans font-light">
+                  {description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Divider */}
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+      </div>
+
+      {/* Why not ChatGPT */}
+      <section className="relative z-10 max-w-5xl mx-auto px-6 py-24">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-16 items-center">
+          <div>
+            <p className="text-xs tracking-[0.2em] uppercase text-primary font-sans mb-4">
+              The honest question
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6 leading-tight">
+              Why not just ask ChatGPT?
+            </h2>
+            <p className="text-muted-foreground text-sm leading-relaxed font-sans font-light mb-4">
+              ChatGPT gives everyone the same advice. It does not know what
+              you believe, what you have learned, or what kind of person you
+              are trying to become.
+            </p>
+            <p className="text-muted-foreground text-sm leading-relaxed font-sans font-light">
+              Principles remembers everything you have ever learned and
+              reflects it back to you — in your words, through your
+              worldview. After six months, you have a map of your own mind
+              that no AI can give you.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              "Advice filtered through your specific worldview",
+              "Remembers your principles across every session",
+              "Detects patterns in how you think and struggle",
+              "Grows more valuable the more you use it",
+              "Your wisdom — not a stranger's opinion",
+            ].map((point) => (
+              <div key={point} className="flex items-start gap-3">
+                <div className="w-5 h-5 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center shrink-0 mt-0.5">
+                  <Check className="h-3 w-3 text-primary" />
+                </div>
+                <p className="text-sm text-muted-foreground font-sans">{point}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Divider */}
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+      </div>
+
+      {/* Pricing */}
+      <section className="relative z-10 max-w-5xl mx-auto px-6 py-24">
+        <div className="text-center mb-16">
+          <p className="text-xs tracking-[0.2em] uppercase text-primary font-sans mb-3">
+            Pricing
+          </p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-foreground">
+            Simple and honest
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+
+          {/* Free */}
+          <div className="rounded-2xl border border-border bg-card p-8">
+            <p className="text-sm font-semibold text-muted-foreground font-sans mb-1">Free</p>
+            <p className="text-4xl font-bold text-foreground mb-1">$0</p>
+            <p className="text-xs text-muted-foreground/60 font-sans mb-8">Forever</p>
+            <div className="space-y-3 mb-8">
+              {[
+                "Up to 20 principles",
+                "Unlimited situation logs",
+                "AI wisdom responses",
+                "Basic log history",
+              ].map((f) => (
+                <div key={f} className="flex items-center gap-2.5">
+                  <Check className="h-4 w-4 text-primary shrink-0" />
+                  <span className="text-sm text-muted-foreground font-sans">{f}</span>
+                </div>
+              ))}
+            </div>
+            <Button
+              asChild
+              variant="outline"
+              className="w-full rounded-full border-border text-muted-foreground hover:text-foreground hover:border-border/80 bg-transparent font-sans"
+            >
+              <Link href="/sign-in">Get started</Link>
+            </Button>
+          </div>
+
+          {/* Pro */}
+          <div className="rounded-2xl border border-primary/30 bg-card p-8 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
+
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-sm font-semibold text-primary font-sans">Pro</p>
+              <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-sans">
+                Most popular
+              </span>
+            </div>
+            <p className="text-4xl font-bold text-foreground mb-1">$6</p>
+            <p className="text-xs text-muted-foreground/60 font-sans mb-8">per month</p>
+            <div className="space-y-3 mb-8">
+              {[
+                "Unlimited principles",
+                "Unlimited situation logs",
+                "AI wisdom responses",
+                "Full log history",
+                "Weekly AI digest email",
+                "Pattern & gap detection",
+                "Semantic search",
+                "Daily principle nudge",
+              ].map((f) => (
+                <div key={f} className="flex items-center gap-2.5">
+                  <Check className="h-4 w-4 text-primary shrink-0" />
+                  <span className="text-sm text-muted-foreground font-sans">{f}</span>
+                </div>
+              ))}
+            </div>
+            <Button
+              asChild
+              className="w-full rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold font-sans"
+            >
+              <Link href="/sign-in">Get started</Link>
+            </Button>
+          </div>
+
+        </div>
+      </section>
+
     </div>
   )
 }
