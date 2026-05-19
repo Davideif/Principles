@@ -8,6 +8,29 @@ const genAI = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY!,
 });
 
+function validateBody(body: unknown): { situation: string } | { validationError: string } {
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return { validationError: "Request body must be a JSON object" }
+  }
+
+  const { situation } = body as Record<string, unknown>
+
+  if (situation === undefined) {
+    return { validationError: "situation is required" }
+  }
+  if (typeof situation !== "string") {
+    return { validationError: "situation must be a string" }
+  }
+  if (!situation.trim()) {
+    return { validationError: "situation cannot be empty" }
+  }
+  if (situation.length > 2000) {
+    return { validationError: "situation must be 2000 characters or fewer" }
+  }
+
+  return { situation: situation.trim() }
+}
+
 export async function POST(req: NextRequest) {
   try {
     // 1. Get the logged in user
@@ -16,17 +39,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const body = await req.json()
-    const { situation } = body
-
-    if (!situation || typeof situation !== "string" || !situation.trim()) {
-      return NextResponse.json(
-        { error: "situation is required" },
-        { status: 400 }
-      )
+    // 2. Parse + validate request body
+    let body: unknown
+    try {
+      body = await req.json()
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 })
     }
 
-    // 2. Fetch the user's principles from Supabase
+    const validated = validateBody(body)
+    if ("validationError" in validated) {
+      return NextResponse.json({ error: validated.validationError }, { status: 400 })
+    }
+
+    const { situation } = validated
+
+    // 3. Fetch the user's principles from Supabase
     const { data: principles, error: principlesError } = await supabaseAdmin
       .from("principles")
       .select("content, source, tags")
@@ -39,7 +67,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // 3. Build the prompt
+    // 4. Build the prompt
     let aiResponse = ""
 
     if (!principles || principles.length === 0) {
@@ -68,7 +96,7 @@ Find the 2-3 most relevant principles and explain specifically how each one appl
 If no principles are relevant, say so honestly and suggest what kind of principle might help.
       `.trim()
 
-      // 4. Call Gemini
+      // 5. Call Gemini
       try {
         const result = await genAI.models.generateContent({
           model: "gemini-2.5-flash-lite",
@@ -92,7 +120,7 @@ If no principles are relevant, say so honestly and suggest what kind of principl
       }
     }
 
-    // 5. Store the log + AI response in Supabase
+    // 6. Store the log + AI response in Supabase
     const { data, error } = await supabaseAdmin
       .from("logs")
       .insert({
@@ -108,7 +136,7 @@ If no principles are relevant, say so honestly and suggest what kind of principl
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
 
-    // 6. Return the log with the AI response
+    // 7. Return the log with the AI response
     return NextResponse.json(data, { status: 201 })
   } catch (err) {
     console.error("Unexpected error:", err)
