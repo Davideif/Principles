@@ -73,7 +73,7 @@ The AI finds the 2–3 principles you already believe in that apply right now. Y
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/principles.git
+git clone https://github.com/Davideif/Principles
 cd principles
 ```
 
