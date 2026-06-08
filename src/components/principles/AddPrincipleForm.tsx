@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { X, Plus, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { validatePrinciple, FormErrors } from "@/lib/validations/validatePrinciple";
 
 interface AddPrincipleFormProps {
   onSuccess?: () => void;
@@ -21,6 +22,7 @@ export default function AddPrincipleForm({ onSuccess, className }: AddPrincipleF
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
 
   const addTag = (value: string) => {
     const trimmed = value.trim().toLowerCase();
@@ -44,38 +46,57 @@ export default function AddPrincipleForm({ onSuccess, className }: AddPrincipleF
   };
 
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!content.trim()) {
-      toast.error("Content is required.");
+  e.preventDefault();
+
+  // Step 1: validate before touching the network
+  const validationErrors = validatePrinciple(content, source, tags);
+  if (Object.keys(validationErrors).length > 0) {
+    setErrors(validationErrors);
+    return;
+  }
+  setErrors({});
+
+  setIsSubmitting(true);
+  try {
+    const response = await fetch("/api/principles", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        content: content.trim(),
+        source: source.trim() || null,
+        tags,
+      }),
+    });
+
+    // Step 2: handle server errors 
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      if (response.status === 409) {
+        setErrors({ content: "This principle already exists." });
+      } else if (response.status >= 500) {
+        toast.error("Server error — please try again later.");
+      } else {
+        toast.error(data?.message || "Something went wrong.");
+      }
       return;
     }
-    setIsSubmitting(true);
-    try {
-      const response = await fetch("/api/principles", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          content: content.trim(),
-          source: source.trim() || null,
-          tags,
-        }),
-      });
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data?.message || "Failed to add principle.");
-      }
-      setContent("");
-      setSource("");
-      setTags([]);
-      setTagInput("");
-      toast.success("Principle added");
-      onSuccess?.();
-    } catch {
-      toast.error("Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+
+    // Step 3: 
+    setContent("");
+    setSource("");
+    setTags([]);
+    setTagInput("");
+    toast.success("Principle added");
+    onSuccess?.();
+
+  } catch (err) {
+
+    console.error("Unexpected error submitting principle:", err);
+    toast.error("An unexpected error occurred. Please try again.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <form

@@ -50,44 +50,43 @@
 }
 
 :root {
-  --background:            oklch(0.067 0.004 60);   /* #0a0a0a */
-  --foreground:            oklch(0.942 0.008 70);   /* #f0ece4 */
-
-  --card:                  oklch(0.09 0.004 60);    /* #0f0e0c */
+  --background:            oklch(0.067 0.004 60);
+  --foreground:            oklch(0.942 0.008 70);
+  --card:                  oklch(0.09 0.004 60);
   --card-foreground:       oklch(0.942 0.008 70);
-
   --popover:               oklch(0.09 0.004 60);
   --popover-foreground:    oklch(0.942 0.008 70);
-
-  --primary:               oklch(0.72 0.09 75);     /* #c9a96e gold */
-  --primary-foreground:    oklch(0.067 0.004 60);   /* dark text on gold */
-
-  --secondary:             oklch(0.13 0.004 60);    /* #1a1814 */
+  --primary:               oklch(0.72 0.09 75);
+  --primary-foreground:    oklch(0.067 0.004 60);
+  --secondary:             oklch(0.13 0.004 60);
   --secondary-foreground:  oklch(0.942 0.008 70);
-
-  --muted:                 oklch(0.16 0.006 60);    /* #2a2520 */
-  --muted-foreground:      oklch(0.52 0.015 65);    /* #7a7060 */
-
-  --accent:                oklch(0.72 0.09 75);     /* gold, same as primary */
+  --muted:                 oklch(0.16 0.006 60);
+  --muted-foreground:      oklch(0.52 0.015 65);
+  --accent:                oklch(0.72 0.09 75);
   --accent-foreground:     oklch(0.067 0.004 60);
-
-  --border:                oklch(0.19 0.007 60);    /* #2a2520 */
+  --border:                oklch(0.19 0.007 60);
   --input:                 oklch(0.19 0.007 60);
-  --ring:                  oklch(0.72 0.09 75);     /* gold focus ring */
-
+  --ring:                  oklch(0.72 0.09 75);
   --destructive:           oklch(0.577 0.245 27.325);
   --radius:                0.625rem;
 }
-
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
     @apply font-sans;
   }
+}
+
+/* Outside @layer so it wins over shadcn's bg-background */
+body {
+  @apply text-foreground;
+  background:
+    radial-gradient(ellipse at top left, oklch(0.72 0.09 75 / 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom right, oklch(0.13 0.004 60 / 0.8) 0%, transparent 50%),
+    oklch(0.067 0.004 60) !important;
+  background-attachment: fixed !important;
+  min-height: 100vh;
 }

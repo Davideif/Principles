@@ -8,7 +8,15 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Sparkles } from "lucide-react";
 
-export default function LogForm() {
+
+// ── Types ─────────────────────────────────────────────────────────────────────
+
+interface LogFormProps {
+  onSuccess?: () => void
+}
+
+
+export default function LogForm({ onSuccess }: LogFormProps) {
   const [situation, setSituation] = useState("");
   const [aiResponse, setAiResponse] = useState("");
   const [loading, setLoading] = useState(false);
@@ -39,6 +47,7 @@ export default function LogForm() {
       const data = await res.json();
       setAiResponse(data.ai_response);
       toast.success("Your principles have spoken.");
+      onSuccess?.();
     } catch {
       toast.error("An error occurred. Please try again.");
     } finally {
