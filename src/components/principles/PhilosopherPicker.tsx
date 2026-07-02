@@ -4,10 +4,10 @@ import { useState } from "react"
 import { useSession } from "next-auth/react"
 import { createClient } from "@/lib/supabase/client"
 import {
-  PHILOSOPHERS,
-  getPrinciplesForPhilosophers,
-  Philosopher,
-} from "@/lib/philosophers"
+  SOURCES,
+  getPrinciplesForSources,
+  Source,
+} from "@/lib/sources"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
@@ -39,8 +39,8 @@ export default function PhilosopherPicker({ onDone }: PhilosopherPickerProps) {
         // deselect their principles too
         setSelectedPrinciples((prevP) => {
           const nextP = new Set(prevP)
-          const philosopher = PHILOSOPHERS.find((p) => p.id === id)
-          philosopher?.principles.forEach((p) => nextP.delete(p.id))
+          const source = SOURCES.find((s) => s.id === id)
+          source?.principles.forEach((p) => nextP.delete(p.id))
           return nextP
         })
       } else {
@@ -62,8 +62,8 @@ export default function PhilosopherPicker({ onDone }: PhilosopherPickerProps) {
 
   // ── Select all principles from a philosopher ──────────────────────────────
 
-  function toggleAllFromPhilosopher(philosopher: Philosopher) {
-    const ids = philosopher.principles.map((p) => p.id)
+  function toggleAllFromPhilosopher(source: Source) {
+    const ids = source.principles.map((p) => p.id)
     const allSelected = ids.every((id) => selectedPrinciples.has(id))
     setSelectedPrinciples((prev) => {
       const next = new Set(prev)
@@ -80,7 +80,7 @@ export default function PhilosopherPicker({ onDone }: PhilosopherPickerProps) {
 
   function goToPrinciples() {
     // Auto-select all principles from chosen philosophers
-    const allPrincipleIds = getPrinciplesForPhilosophers(
+    const allPrincipleIds = getPrinciplesForSources(
       Array.from(selectedPhilosophers)
     ).map(({ principle }) => principle.id)
     setSelectedPrinciples(new Set(allPrincipleIds))
@@ -97,16 +97,16 @@ export default function PhilosopherPicker({ onDone }: PhilosopherPickerProps) {
     const userId = session.user.id
 
     // Build insert payload
-    const allPrinciples = getPrinciplesForPhilosophers(
+    const allPrinciples = getPrinciplesForSources(
       Array.from(selectedPhilosophers)
     )
 
     const toInsert = allPrinciples
       .filter(({ principle }) => selectedPrinciples.has(principle.id))
-      .map(({ principle, philosopher }) => ({
+      .map(({ principle, source }) => ({
         user_id: userId,
         content: principle.content,
-        source: philosopher.name,
+        source: source.name,
         tags: principle.tags,
       }))
 
@@ -183,12 +183,12 @@ function StepOne({
 
       {/* Philosopher grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {PHILOSOPHERS.map((philosopher) => {
-          const isSelected = selected.has(philosopher.id)
+        {SOURCES.map((source) => {
+          const isSelected = selected.has(source.id)
           return (
             <button
-              key={philosopher.id}
-              onClick={() => onToggle(philosopher.id)}
+              key={source.id}
+              onClick={() => onToggle(source.id)}
               className={cn(
                 "w-full text-left rounded-xl border p-4 transition-all",
                 isSelected
@@ -199,19 +199,19 @@ function StepOne({
               <div className="flex items-start justify-between gap-3">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-xl">{philosopher.emoji}</span>
+                    <span className="text-xl">{source.emoji}</span>
                     <span className="text-sm font-semibold">
-                      {philosopher.name}
+                      {source.name}
                     </span>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    {philosopher.tradition} · {philosopher.era}
+                    {source.tradition} · {source.era}
                   </p>
                   <p className="text-xs text-muted-foreground leading-relaxed">
-                    {philosopher.tagline}
+                    {source.tagline}
                   </p>
                   <p className="text-xs text-muted-foreground/60">
-                    {philosopher.principles.length} principles
+                    {source.principles.length} principles
                   </p>
                 </div>
 
@@ -274,14 +274,14 @@ function StepTwo({
   selectedPhilosophers: Set<string>
   selectedPrinciples: Set<string>
   onTogglePrinciple: (id: string) => void
-  onToggleAll: (philosopher: Philosopher) => void
+  onToggleAll: (source: Source) => void
   onBack: () => void
   onSave: () => void
   onSkip?: () => void
   loading: boolean
 }) {
-  const philosophers = PHILOSOPHERS.filter((p) =>
-    selectedPhilosophers.has(p.id)
+  const sources = SOURCES.filter((s) =>
+    selectedPhilosophers.has(s.id)
   )
 
   return (
@@ -303,29 +303,29 @@ function StepTwo({
 
       {/* Principles grouped by philosopher */}
       <div className="space-y-6">
-        {philosophers.map((philosopher) => {
-          const allSelected = philosopher.principles.every((p) =>
+        {sources.map((source) => {
+          const allSelected = source.principles.every((p) =>
             selectedPrinciples.has(p.id)
           )
-          const someSelected = philosopher.principles.some((p) =>
+          const someSelected = source.principles.some((p) =>
             selectedPrinciples.has(p.id)
           )
 
           return (
-            <div key={philosopher.id} className="space-y-3">
+            <div key={source.id} className="space-y-3">
               {/* Philosopher header */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="text-lg">{philosopher.emoji}</span>
+                  <span className="text-lg">{source.emoji}</span>
                   <span className="text-sm font-semibold">
-                    {philosopher.name}
+                    {source.name}
                   </span>
                   <Badge variant="secondary" className="text-xs">
-                    {philosopher.tradition}
+                    {source.tradition}
                   </Badge>
                 </div>
                 <button
-                  onClick={() => onToggleAll(philosopher)}
+                  onClick={() => onToggleAll(source)}
                   className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {allSelected ? "Deselect all" : someSelected ? "Select all" : "Select all"}
@@ -334,7 +334,7 @@ function StepTwo({
 
               {/* Principles */}
               <div className="grid grid-cols-1 gap-2">
-                {philosopher.principles.map((principle) => {
+                {source.principles.map((principle) => {
                   const isSelected = selectedPrinciples.has(principle.id)
                   return (
                     <button

@@ -2,7 +2,6 @@ import Link from "next/link"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { redirect } from "next/navigation"
-import { Button } from "@/components/ui/button"
 import {
   BookOpen,
   ScrollText,
@@ -30,12 +29,12 @@ export default async function HomePage() {
         }}
       />
 
-      {/* ── Hero — now with video background ── */}
+      {/* ── Hero — with video ── */}
       <HeroSection />  
 
       {/* ── Divider ── */}
       <div className="max-w-5xl mx-auto px-6">
-        <div className="h-px bg-gradient-to-r from-transparent via-[#2a2520] to-transparent" />
+        <div className="h-px bg-linear-to-r from-transparent via-[#2a2520] to-transparent" />
       </div>
 
       {/* ── How it works ── */}
@@ -145,87 +144,7 @@ export default async function HomePage() {
         <div className="h-px bg-gradient-to-r from-transparent via-[#2a2520] to-transparent" />
       </div>
 
-      {/* ── Pricing ── */}
-      <section className="relative z-10 max-w-5xl mx-auto px-6 py-24">
-        <div className="text-center mb-16">
-          <p className="text-xs tracking-[0.2em] uppercase text-[#c9a96e] font-sans mb-3">
-            Pricing
-          </p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#f0ece4]">
-            Simple and honest
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
-
-          {/* Free */}
-          <div className="rounded-2xl border border-[#2a2520] bg-[#0f0e0c] p-8">
-            <p className="text-sm font-semibold text-[#a09880] font-sans mb-1">Free</p>
-            <p className="text-4xl font-bold text-[#f0ece4] mb-1">$0</p>
-            <p className="text-xs text-[#5a5446] font-sans mb-8">Forever</p>
-            <div className="space-y-3 mb-8">
-              {[
-                "Up to 20 principles",
-                "Unlimited situation logs",
-                "AI wisdom responses",
-                "Basic log history",
-              ].map((f) => (
-                <div key={f} className="flex items-center gap-2.5">
-                  <Check className="h-4 w-4 text-[#c9a96e] shrink-0" />
-                  <span className="text-sm text-[#7a7060] font-sans">{f}</span>
-                </div>
-              ))}
-            </div>
-            <Button
-              asChild
-              variant="outline"
-              className="w-full rounded-full border-[#2a2520] text-[#a09880] hover:text-[#f0ece4] hover:border-[#3a3530] bg-transparent font-sans"
-            >
-              <Link href="/sign-in">Get started</Link>
-            </Button>
-          </div>
-
-          {/* Pro */}
-          <div className="rounded-2xl border border-[#c9a96e]/30 bg-[#0f0e0c] p-8 relative overflow-hidden">
-            {/* Glow */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#c9a96e]/5 rounded-full blur-2xl pointer-events-none" />
-
-            <div className="flex items-center justify-between mb-1">
-              <p className="text-sm font-semibold text-[#c9a96e] font-sans">Pro</p>
-              <span className="text-xs bg-[#c9a96e]/10 text-[#c9a96e] px-2 py-0.5 rounded-full font-sans">
-                Most popular
-              </span>
-            </div>
-            <p className="text-4xl font-bold text-[#f0ece4] mb-1">$6</p>
-            <p className="text-xs text-[#5a5446] font-sans mb-8">per month</p>
-            <div className="space-y-3 mb-8">
-              {[
-                "Unlimited principles",
-                "Unlimited situation logs",
-                "AI wisdom responses",
-                "Full log history",
-                "Weekly AI digest email",
-                "Pattern & gap detection",
-                "Semantic search",
-                "Daily principle nudge",
-              ].map((f) => (
-                <div key={f} className="flex items-center gap-2.5">
-                  <Check className="h-4 w-4 text-[#c9a96e] shrink-0" />
-                  <span className="text-sm text-[#a09880] font-sans">{f}</span>
-                </div>
-              ))}
-            </div>
-            <Button
-              asChild
-              className="w-full rounded-full bg-[#c9a96e] hover:bg-[#b8945a] text-[#0a0a0a] font-semibold font-sans"
-            >
-              <Link href="/sign-in">Get started</Link>
-            </Button>
-          </div>
-
-        </div>
-      </section>
-
+   
     </div>
   )
 }

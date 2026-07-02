@@ -1,22 +1,22 @@
 // lib/philosophers.ts
 
-export interface PhilosopherPrinciple {
+export interface SourcePrinciple {
   id: string
   content: string
   tags: string[]
 }
 
-export interface Philosopher {
+export interface Source {
   id: string
   name: string
   era: string
   tradition: string
   tagline: string
   emoji: string
-  principles: PhilosopherPrinciple[]
+  principles: SourcePrinciple[]
 }
 
-export const PHILOSOPHERS: Philosopher[] = [
+export const SOURCES: Source[] = [
   // ── Marcus Aurelius ───────────────────────────────────────────────────────
   {
     id: "marcus-aurelius",
@@ -446,26 +446,302 @@ export const PHILOSOPHERS: Philosopher[] = [
       },
     ],
   },
+
+  // ── Atomic Habits ─────────────────────────────────────────────────────────
+  {
+    id: "atomic-habits",
+    name: "Atomic Habits",
+    era: "James Clear · 2018",
+    tradition: "Habits & Systems",
+    tagline: "Tiny changes, remarkable results. The definitive book on habit building.",
+    emoji: "⚛️",
+    principles: [
+      {
+        id: "ah-1",
+        content: "You do not rise to the level of your goals. You fall to the level of your systems.",
+        tags: ["habits", "systems", "discipline"],
+      },
+      {
+        id: "ah-2",
+        content: "Every action you take is a vote for the type of person you wish to become.",
+        tags: ["habits", "identity", "action"],
+      },
+      {
+        id: "ah-3",
+        content: "Make it obvious, make it attractive, make it easy, make it satisfying.",
+        tags: ["habits", "systems", "behaviour"],
+      },
+      {
+        id: "ah-4",
+        content: "Habits are the compound interest of self-improvement. One percent better every day counts for a lot.",
+        tags: ["habits", "consistency", "growth"],
+      },
+      {
+        id: "ah-5",
+        content: "The most effective way to change your habits is to focus not on what you want to achieve, but on who you wish to become.",
+        tags: ["habits", "identity", "mindset"],
+      },
+      {
+        id: "ah-6",
+        content: "Environment is the invisible hand that shapes human behaviour. Design your environment for success.",
+        tags: ["habits", "environment", "systems"],
+      },
+    ],
+  },
+
+  // ── The 7 Habits of Highly Effective People ───────────────────────────────
+  {
+    id: "seven-habits",
+    name: "The 7 Habits",
+    era: "Stephen Covey · 1989",
+    tradition: "Effectiveness",
+    tagline: "The classic framework for personal and professional effectiveness.",
+    emoji: "🧭",
+    principles: [
+      {
+        id: "sh-1",
+        content: "Be proactive. Focus on what you can control, not what you cannot.",
+        tags: ["proactivity", "control", "mindset"],
+      },
+      {
+        id: "sh-2",
+        content: "Begin with the end in mind. Know where you are going before you start walking.",
+        tags: ["vision", "goals", "clarity"],
+      },
+      {
+        id: "sh-3",
+        content: "Put first things first. Schedule your priorities instead of prioritising your schedule.",
+        tags: ["priorities", "time", "discipline"],
+      },
+      {
+        id: "sh-4",
+        content: "Seek first to understand, then to be understood.",
+        tags: ["communication", "relationships", "empathy"],
+      },
+      {
+        id: "sh-5",
+        content: "Think win-win. Life is not a zero-sum game.",
+        tags: ["relationships", "mindset", "negotiation"],
+      },
+      {
+        id: "sh-6",
+        content: "Sharpen the saw. Renew yourself physically, mentally, socially, and spiritually.",
+        tags: ["growth", "health", "balance"],
+      },
+    ],
+  },
+
+
+  // ── Deep Work ─────────────────────────────────────────────────────────────
+  {
+    id: "deep-work",
+    name: "Deep Work",
+    era: "Cal Newport · 2016",
+    tradition: "Focus & Productivity",
+    tagline: "Rules for focused success in a distracted world.",
+    emoji: "🎯",
+    principles: [
+      {
+        id: "dw-1",
+        content: "Deep work is rare and valuable. The ability to focus without distraction is a superpower.",
+        tags: ["focus", "work", "productivity"],
+      },
+      {
+        id: "dw-2",
+        content: "Clarity about what matters provides clarity about what does not.",
+        tags: ["clarity", "priorities", "focus"],
+      },
+      {
+        id: "dw-3",
+        content: "Schedule every minute of your day. Time not planned is time lost to distraction.",
+        tags: ["time", "discipline", "productivity"],
+      },
+      {
+        id: "dw-4",
+        content: "Embrace boredom. If you always fill silence with your phone, your brain loses the ability to focus.",
+        tags: ["focus", "discipline", "attention"],
+      },
+      {
+        id: "dw-5",
+        content: "Quit social media that does not serve a clear purpose in your life.",
+        tags: ["attention", "focus", "environment"],
+      },
+    ],
+  },
+
+  // ── The Almanack of Naval Ravikant ────────────────────────────────────────
+  {
+    id: "naval-almanack",
+    name: "The Almanack of Naval",
+    era: "Naval Ravikant · 2020",
+    tradition: "Wealth & Happiness",
+    tagline: "A guide to wealth and happiness from Silicon Valley's philosopher.",
+    emoji: "🧠",
+    principles: [
+      {
+        id: "na-1",
+        content: "Seek wealth, not money or status. Wealth is assets that earn while you sleep.",
+        tags: ["wealth", "work", "freedom"],
+      },
+      {
+        id: "na-2",
+        content: "Play long-term games with long-term people. All returns in life come from compound interest.",
+        tags: ["relationships", "patience", "wealth"],
+      },
+      {
+        id: "na-3",
+        content: "Specific knowledge is knowledge you cannot be trained for. It is found by pursuing your genuine curiosity.",
+        tags: ["learning", "work", "curiosity"],
+      },
+      {
+        id: "na-4",
+        content: "Happiness is a skill you can learn, like fitness or nutrition. It is a choice you make and a skill you develop.",
+        tags: ["happiness", "mindset", "growth"],
+      },
+      {
+        id: "na-5",
+        content: "Desire is a contract you make with yourself to be unhappy until you get what you want.",
+        tags: ["desire", "happiness", "mindset"],
+      },
+      {
+        id: "na-6",
+        content: "Escape competition through authenticity. No one can compete with you on being you.",
+        tags: ["authenticity", "work", "identity"],
+      },
+    ],
+  },
+
+  // ── The Psychology of Money ───────────────────────────────────────────────
+  {
+    id: "psychology-of-money",
+    name: "The Psychology of Money",
+    era: "Morgan Housel · 2020",
+    tradition: "Money & Behaviour",
+    tagline: "Timeless lessons on wealth, greed, and happiness.",
+    emoji: "💰",
+    principles: [
+      {
+        id: "pm-1",
+        content: "Doing well with money has little to do with how smart you are and a lot to do with how you behave.",
+        tags: ["money", "behaviour", "discipline"],
+      },
+      {
+        id: "pm-2",
+        content: "Wealth is what you do not see. It is the cars not bought and the upgrades not made.",
+        tags: ["money", "wealth", "restraint"],
+      },
+      {
+        id: "pm-3",
+        content: "The highest form of wealth is the ability to wake up and say: I can do whatever I want today.",
+        tags: ["money", "freedom", "wealth"],
+      },
+      {
+        id: "pm-4",
+        content: "Save money. Not for a specific goal — save for a world where surprises are the rule.",
+        tags: ["money", "saving", "resilience"],
+      },
+      {
+        id: "pm-5",
+        content: "Enough is realising that the opposite — an insatiable appetite for more — will push you to regret.",
+        tags: ["money", "contentment", "wisdom"],
+      },
+    ],
+  },
+
+
+  // ── Can't Hurt Me ─────────────────────────────────────────────────────────
+  {
+    id: "cant-hurt-me",
+    name: "Can't Hurt Me",
+    era: "David Goggins · 2018",
+    tradition: "Mental Toughness",
+    tagline: "Master your mind and defy the odds. Raw, brutal self-discipline.",
+    emoji: "🔥",
+    principles: [
+      {
+        id: "ch-1",
+        content: "When you think you are done, you are only at 40 percent of your capacity.",
+        tags: ["toughness", "limits", "mindset"],
+      },
+      {
+        id: "ch-2",
+        content: "You are in danger of living a life so comfortable that you will die without ever realising your potential.",
+        tags: ["comfort", "growth", "potential"],
+      },
+      {
+        id: "ch-3",
+        content: "Do something that sucks every day. Callous your mind through discomfort.",
+        tags: ["discipline", "toughness", "habits"],
+      },
+      {
+        id: "ch-4",
+        content: "Take souls. When you outwork everyone around you, your success demoralises the competition.",
+        tags: ["work", "excellence", "competition"],
+      },
+      {
+        id: "ch-5",
+        content: "The accountability mirror does not lie. Face yourself honestly every single day.",
+        tags: ["honesty", "accountability", "growth"],
+      },
+    ],
+  },
+
+  // ── The Courage to Be Disliked ────────────────────────────────────────────
+  {
+    id: "courage-disliked",
+    name: "The Courage to Be Disliked",
+    era: "Kishimi & Koga · 2013",
+    tradition: "Adlerian Psychology",
+    tagline: "Free yourself from the expectations of others. Japanese phenomenon.",
+    emoji: "🦋",
+    principles: [
+      {
+        id: "cd-1",
+        content: "Freedom is being disliked by other people. It is proof you are living by your own principles.",
+        tags: ["freedom", "authenticity", "courage"],
+      },
+      {
+        id: "cd-2",
+        content: "All problems are interpersonal relationship problems.",
+        tags: ["relationships", "psychology", "awareness"],
+      },
+      {
+        id: "cd-3",
+        content: "Separate your tasks from others' tasks. What others think of you is their task, not yours.",
+        tags: ["boundaries", "freedom", "mindset"],
+      },
+      {
+        id: "cd-4",
+        content: "Your unhappiness is something you chose because it serves a purpose. You can choose differently.",
+        tags: ["choice", "happiness", "responsibility"],
+      },
+      {
+        id: "cd-5",
+        content: "Live in the here and now. Life is a series of moments, not a line towards a destination.",
+        tags: ["presence", "mindset", "meaning"],
+      },
+    ],
+  },
 ]
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 // Get all traditions for filtering
 export const TRADITIONS = Array.from(
-  new Set(PHILOSOPHERS.map((p) => p.tradition))
+  new Set(SOURCES.map((s) => s.tradition))
 )
 
-// Get a philosopher by id
-export function getPhilosopher(id: string): Philosopher | undefined {
-  return PHILOSOPHERS.find((p) => p.id === id)
+// Get a source by id
+export function getSource(id: string): Source | undefined {
+  return SOURCES.find((s) => s.id === id)
 }
 
-// Get all principles from a list of philosopher ids
-export function getPrinciplesForPhilosophers(
-  philosopherIds: string[]
-): { principle: PhilosopherPrinciple; philosopher: Philosopher }[] {
-  return PHILOSOPHERS.filter((p) => philosopherIds.includes(p.id)).flatMap(
-    (philosopher) =>
-      philosopher.principles.map((principle) => ({ principle, philosopher }))
+// Get all principles from a list of source ids
+export function getPrinciplesForSources(
+  sourceIds: string[]
+): { principle: SourcePrinciple; source: Source }[] {
+  return SOURCES.filter((s) => sourceIds.includes(s.id)).flatMap(
+    (source) =>
+      source.principles.map((principle) => ({ principle, source }))
   )
 }

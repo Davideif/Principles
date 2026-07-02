@@ -40,12 +40,8 @@ const authedNavLinks = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/log", label: "Situation Logs", icon: BarChart2 },
   { href: "/dashboard/principles", label: "Principles", icon: Users },
-  { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
-const guestNavLinks = [
-  { href: "/", label: "Home", icon: LayoutDashboard },
-];
 
 export default function Navbar() {
   const { data: session, status } = useSession();
@@ -55,7 +51,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const navLinks = isLoggedIn ? authedNavLinks : guestNavLinks;
+  const navLinks = isLoggedIn ? authedNavLinks : [];
 
   const userImage = session?.user?.image ?? undefined;
   const userName = session?.user?.name ?? "User";
@@ -69,7 +65,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="mx-auto flex h-14 max-w-screen-xl items-center justify-between px-4 sm:px-6">
+      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6">
 
         {/* Left — Logo */}
         <div className="flex items-center gap-8">
