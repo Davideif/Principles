@@ -28,6 +28,9 @@ export default function PrinciplesPage() {
       {/* Principles list */}
       <PrincipleList />
 
+
+      
+
     </div>
   )
 }

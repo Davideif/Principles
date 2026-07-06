@@ -121,7 +121,6 @@ export default function Navbar() {
                   >
                     <Avatar className="h-6 w-6">
                       <AvatarImage src={userImage} alt={userName} />
-                      {/* ✦ IMPROVED: gold initials fallback instead of generic grey */}
                       <AvatarFallback className="text-[10px] bg-primary/10 text-primary">
                         {userInitials}
                       </AvatarFallback>
@@ -136,18 +135,6 @@ export default function Navbar() {
                     <p className="text-sm font-medium truncate font-sans">{userEmail}</p>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/profile">
-                      <UserCircle className="mr-2 h-4 w-4" />
-                      Profile
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/billing">
-                      <CreditCard className="mr-2 h-4 w-4" />
-                      Billing
-                    </Link>
-                  </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard/settings">
                       <Settings className="mr-2 h-4 w-4" />
